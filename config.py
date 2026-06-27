@@ -11,8 +11,24 @@ except Exception:
 BASE_DIR = Path(__file__).parent
 DOCS_DIR = BASE_DIR / "docs"            # GitHub Pages root
 EPISODES_DIR = DOCS_DIR / "episodes"    # mp3 files live here
+ASSETS_DIR = BASE_DIR / "assets"        # your recorded intro/outro live here
 STATE_FILE = BASE_DIR / "state.json"
 EPISODES_DIR.mkdir(parents=True, exist_ok=True)
+ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+
+# Your own-voice intro/outro (optional). Drop intro.* / outro.* in assets/ in ANY
+# common format (mp3/m4a/wav/ogg - phone recordings work) and the bot wraps every
+# AI-voiced episode with them (hybrid = your voice + automation).
+def _find(name):
+    for ext in ("mp3", "m4a", "wav", "ogg", "aac"):
+        p = ASSETS_DIR / f"{name}.{ext}"
+        if p.exists():
+            return p
+    return ASSETS_DIR / f"{name}.mp3"   # default (may not exist yet)
+
+
+INTRO = _find("intro")
+OUTRO = _find("outro")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 SITE_URL = os.getenv("SITE_URL", "https://pradeepprajapati9.github.io/podcast_bot").rstrip("/")

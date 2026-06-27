@@ -14,6 +14,7 @@ import writer
 import voiceover
 import rss
 import cover
+import audio
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -51,9 +52,19 @@ def run():
     slug = f"ep{count}"
     ep["slug"] = slug
 
-    # voice the episode
+    # voice the body, then wrap with your recorded intro/outro if present (hybrid)
     mp3 = config.EPISODES_DIR / f"{slug}.mp3"
-    voiceover.make_audio(ep["script"], str(mp3))
+    body = config.EPISODES_DIR / f"{slug}_body.mp3"
+    voiceover.make_audio(ep["script"], str(body))
+    parts = ([str(config.INTRO)] if config.INTRO.exists() else []) + [str(body)] + \
+            ([str(config.OUTRO)] if config.OUTRO.exists() else [])
+    if len(parts) == 1:
+        body.replace(mp3)
+    else:
+        audio.stitch(parts, str(mp3))
+        body.unlink()
+        print(f"[podcast] wrapped with {'intro' if config.INTRO.exists() else ''} "
+              f"{'outro' if config.OUTRO.exists() else ''} (your voice)")
 
     words = len(ep["script"].split())
     entry = {

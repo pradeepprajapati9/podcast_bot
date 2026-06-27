@@ -2,3 +2,4 @@ edge-tts        # AI voice for episodes
 requests        # Gemini
 python-dotenv   # .env config
 Pillow          # podcast cover art
+imageio-ffmpeg  # stitch intro + body + outro audio
