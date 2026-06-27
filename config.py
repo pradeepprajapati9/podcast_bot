@@ -20,7 +20,7 @@ ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 # common format (mp3/m4a/wav/ogg - phone recordings work) and the bot wraps every
 # AI-voiced episode with them (hybrid = your voice + automation).
 def _find(name):
-    for ext in ("mp3", "m4a", "wav", "ogg", "aac"):
+    for ext in ("mp3", "m4a", "mp4", "wav", "ogg", "aac", "amr", "opus"):
         p = ASSETS_DIR / f"{name}.{ext}"
         if p.exists():
             return p
