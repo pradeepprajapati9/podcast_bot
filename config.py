@@ -39,8 +39,9 @@ PODCAST_DESC = os.getenv("PODCAST_DESC", "Roz ek dilchasp gyaan ki baat.").strip
 PODCAST_EMAIL = os.getenv("PODCAST_EMAIL", "you@example.com").strip()
 
 POD_LANG = os.getenv("POD_LANG", "hi").lower()
-VOICE = {"hi": "hi-IN-SwaraNeural", "en": "en-US-AvaMultilingualNeural"}.get(
-    POD_LANG, "hi-IN-SwaraNeural")
+# Male voices (match the user's own-voice intro/outro)
+VOICE = {"hi": "hi-IN-MadhurNeural", "en": "en-US-AndrewMultilingualNeural"}.get(
+    POD_LANG, "hi-IN-MadhurNeural")
 
 # Keep the repo bounded: only the most recent N episodes are kept.
 MAX_EPISODES = int(os.getenv("MAX_EPISODES", "60"))
