@@ -31,12 +31,14 @@ INTRO = _find("intro")
 OUTRO = _find("outro")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
-SITE_URL = os.getenv("SITE_URL", "https://pradeepprajapati9.github.io/podcast_bot").rstrip("/")
+# NOTE: use `or` so an empty/blank env value (e.g. an unset GitHub Variable) still
+# falls back to the default - a relative URL here silently breaks the Spotify feed.
+SITE_URL = (os.getenv("SITE_URL") or "https://pradeepprajapati9.github.io/podcast_bot").strip().rstrip("/")
 
 PODCAST_TITLE = os.getenv("PODCAST_TITLE", "Gyaan Ki Baatein").strip()
 PODCAST_AUTHOR = os.getenv("PODCAST_AUTHOR", "Pradeep Pk").strip()
 PODCAST_DESC = os.getenv("PODCAST_DESC", "Roz ek dilchasp gyaan ki baat.").strip()
-PODCAST_EMAIL = os.getenv("PODCAST_EMAIL", "you@example.com").strip()
+PODCAST_EMAIL = os.getenv("PODCAST_EMAIL", "prajapatipradeepkumar954@gmail.com").strip()
 
 POD_LANG = os.getenv("POD_LANG", "hi").lower()
 # Male voices (match the user's own-voice intro/outro)
