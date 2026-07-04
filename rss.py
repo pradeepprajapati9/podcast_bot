@@ -10,6 +10,14 @@ def _esc(s):
     return html.escape(str(s or ""), quote=True)
 
 
+def _notes(desc):
+    """Episode description + a follow/monetization call-to-action for show-notes."""
+    cta = config.CTA
+    if config.CTA_LINK:
+        cta = f"{cta} {config.CTA_LINK}"
+    return f"{desc} - {cta}" if desc else cta
+
+
 def build_feed(episodes: list[dict]) -> str:
     chan = [
         f"<title>{_esc(config.PODCAST_TITLE)}</title>",
@@ -27,11 +35,12 @@ def build_feed(episodes: list[dict]) -> str:
     ]
     items = []
     for e in episodes:                      # newest first (caller sorts)
+        notes = _notes(e.get('description', ''))
         items.append(
             "<item>"
             f"<title>{_esc(e['title'])}</title>"
-            f"<description>{_esc(e.get('description',''))}</description>"
-            f"<itunes:summary>{_esc(e.get('description',''))}</itunes:summary>"
+            f"<description>{_esc(notes)}</description>"
+            f"<itunes:summary>{_esc(notes)}</itunes:summary>"
             f'<enclosure url="{U}/episodes/{e["slug"]}.mp3" length="{e.get("bytes",0)}" '
             f'type="audio/mpeg"/>'
             f'<guid isPermaLink="false">{e["slug"]}</guid>'
@@ -57,7 +66,12 @@ def build_index(episodes: list[dict]) -> str:
            "padding:30px 0;text-align:center}header img{width:160px;border-radius:18px;"
            "box-shadow:0 6px 20px rgba(0,0,0,.25)}.card{background:#fff;margin:16px 0;padding:20px;"
            "border-radius:14px;box-shadow:0 3px 14px rgba(30,35,48,.08)}.card h3{margin:.2em 0}"
-           "audio{width:100%;margin-top:10px}.d{color:#6b7280;font-size:12px}a{color:#6366f1}")
+           "audio{width:100%;margin-top:10px}.d{color:#6b7280;font-size:12px}a{color:#6366f1}"
+           ".cta{background:#eef0ff;border:1px solid #d7dbff;border-radius:12px;padding:14px 18px;"
+           "margin:16px 0;text-align:center;font-weight:600;color:#4338ca}")
+    cta_txt = config.CTA
+    cta_html = (f'<a href="{html.escape(config.CTA_LINK)}" target="_blank" rel="noopener">{html.escape(cta_txt)}</a>'
+                if config.CTA_LINK else html.escape(cta_txt))
     return (f'<!doctype html><html lang="{config.POD_LANG}"><head><meta charset="utf-8">'
             f'<meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{html.escape(config.PODCAST_TITLE)}</title>'
@@ -66,5 +80,6 @@ def build_index(episodes: list[dict]) -> str:
             f'<header><img src="cover.jpg" alt="cover"><h1>{html.escape(config.PODCAST_TITLE)}</h1>'
             f'<p>{html.escape(config.PODCAST_DESC)}</p>'
             f'<p><a href="feed.xml" style="color:#fff">RSS Feed</a></p></header>'
-            f'<main class="wrap"><h2>Episodes</h2>{"".join(cards) or "<p>Coming soon...</p>"}'
+            f'<main class="wrap"><div class="cta">{cta_html}</div>'
+            f'<h2>Episodes</h2>{"".join(cards) or "<p>Coming soon...</p>"}'
             f'</main></body></html>')

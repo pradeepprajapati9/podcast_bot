@@ -40,6 +40,11 @@ PODCAST_AUTHOR = os.getenv("PODCAST_AUTHOR", "Pradeep Pk").strip()
 PODCAST_DESC = os.getenv("PODCAST_DESC", "Roz ek dilchasp gyaan ki baat.").strip()
 PODCAST_EMAIL = os.getenv("PODCAST_EMAIL", "prajapatipradeepkumar954@gmail.com").strip()
 
+# Call-to-action shown in every episode's show-notes + on the website. A CTA_LINK
+# (YouTube/affiliate) is optional now and can be added later to start monetizing.
+CTA = os.getenv("CTA", "Pasand aaya to Follow karein - roz ek naya episode!").strip()
+CTA_LINK = os.getenv("CTA_LINK", "").strip()
+
 POD_LANG = os.getenv("POD_LANG", "hi").lower()
 # Male voices (match the user's own-voice intro/outro)
 VOICE = {"hi": "hi-IN-MadhurNeural", "en": "en-US-AndrewMultilingualNeural"}.get(
